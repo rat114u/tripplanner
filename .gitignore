@@ -1,0 +1,25 @@
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Temp files
+*.log
+*.tmp
+*.bak
+
+# Node (if you later add build tools)
+node_modules/
+package-lock.json
+
+# Local notes / personal drafts
+drafts/
+notes.md
+personal/

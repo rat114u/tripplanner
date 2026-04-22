@@ -1,0 +1,2305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hawaii Family Trip 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" />
+<style>
+  :root {
+    --ocean: #0a6e8a;
+    --ocean-light: #1a9bb5;
+    --sand: #f5e6c8;
+    --sand-dark: #e8d4a8;
+    --coral: #e8614a;
+    --coral-light: #f0896f;
+    --palm: #2d6a4f;
+    --palm-light: #40916c;
+    --sunset: #f4a261;
+    --white: #fefcf8;
+    --ink: #1a1a2e;
+    --ink-light: #2d3561;
+    --muted: #6b7280;
+    --border: rgba(10,110,138,0.15);
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--white);
+    color: var(--ink);
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    background: linear-gradient(160deg, #0a6e8a 0%, #0d5c73 40%, #1a3a4a 100%);
+    color: white;
+    padding: 70px 40px 80px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 80px;
+    background: var(--white);
+    clip-path: ellipse(60% 100% at 50% 100%);
+  }
+  .hero-waves {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    opacity: 0.06;
+    background-image: repeating-linear-gradient(
+      -45deg,
+      transparent,
+      transparent 30px,
+      rgba(255,255,255,0.5) 30px,
+      rgba(255,255,255,0.5) 32px
+    );
+  }
+  .hero-inner { max-width: 900px; margin: 0 auto; position: relative; }
+  .hero-badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.3);
+    color: rgba(255,255,255,0.9);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 5px 14px;
+    border-radius: 20px;
+    margin-bottom: 20px;
+  }
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.4rem, 5vw, 3.8rem);
+    font-weight: 700;
+    line-height: 1.15;
+    margin-bottom: 16px;
+    letter-spacing: -0.01em;
+  }
+  .hero h1 span { color: #7dd3e8; }
+  .hero-sub {
+    font-size: 16px;
+    color: rgba(255,255,255,0.75);
+    font-weight: 300;
+    margin-bottom: 36px;
+    max-width: 520px;
+  }
+  .hero-pills { display: flex; flex-wrap: wrap; gap: 10px; }
+  .pill {
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.2);
+    color: white;
+    font-size: 13px;
+    padding: 6px 14px;
+    border-radius: 20px;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .pill-dot { width: 6px; height: 6px; border-radius: 50%; background: #7dd3e8; }
+
+  /* ── LAYOUT ── */
+  .container { max-width: 940px; margin: 0 auto; padding: 0 24px; }
+
+  /* ── NAV TABS ── */
+  .nav-tabs {
+    display: flex;
+    gap: 0;
+    border-bottom: 2px solid var(--border);
+    margin: 48px 0 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .nav-tabs::-webkit-scrollbar { display: none; }
+  .nav-tab {
+    padding: 12px 22px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--muted);
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -2px;
+    white-space: nowrap;
+    transition: all 0.2s;
+    letter-spacing: 0.01em;
+    text-decoration: none;
+  }
+  .nav-tab:hover { color: var(--ocean); }
+  .nav-tab.active { color: var(--ocean); border-bottom-color: var(--ocean); }
+
+  /* ── SECTION HEADERS ── */
+  .section { padding: 56px 0; }
+  .section-head { margin-bottom: 36px; }
+  .section-eyebrow {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ocean-light);
+    margin-bottom: 8px;
+  }
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--ink);
+    line-height: 1.2;
+  }
+
+  /* ── ROUTE BAR ── */
+  .route-bar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    background: #f0f9fc;
+    border: 1px solid rgba(10,110,138,0.2);
+    border-radius: 12px;
+    padding: 16px 20px;
+    margin-bottom: 36px;
+  }
+  .route-node {
+    background: white;
+    border: 1px solid rgba(10,110,138,0.25);
+    border-radius: 8px;
+    padding: 6px 14px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--ink);
+  }
+  .route-arrow { color: var(--ocean-light); font-size: 16px; font-weight: 300; }
+  .route-label { font-size: 11px; color: var(--muted); margin-left: 2px; }
+
+  /* ── ALERT BOX ── */
+  .alert {
+    background: #fff8ed;
+    border: 1px solid #f4a261;
+    border-left: 4px solid #f4a261;
+    border-radius: 0 10px 10px 0;
+    padding: 14px 18px;
+    font-size: 13px;
+    color: #7a4010;
+    margin-bottom: 32px;
+    line-height: 1.6;
+  }
+  .alert strong { color: #5a2f08; }
+
+  /* ── ISLAND SECTION HEADER ── */
+  .island-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin: 48px 0 20px;
+  }
+  .island-icon {
+    width: 44px; height: 44px;
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+  }
+  .island-icon.blue { background: #e0f4f9; }
+  .island-icon.green { background: #e4f5ec; }
+  .island-icon.coral { background: #fdeee9; }
+  .island-label-group h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 2px;
+  }
+  .island-label-group p { font-size: 12px; color: var(--muted); }
+
+  /* ── DAY CARDS ── */
+  .day-card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 22px 24px;
+    margin-bottom: 14px;
+    position: relative;
+    transition: box-shadow 0.2s;
+  }
+  .day-card:hover { box-shadow: 0 4px 20px rgba(10,110,138,0.1); }
+  .day-card-top {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    margin-bottom: 16px;
+  }
+  .day-badge {
+    font-size: 11px;
+    font-weight: 500;
+    padding: 4px 10px;
+    border-radius: 20px;
+    white-space: nowrap;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .day-badge.blue { background: #ddf0f7; color: #0a5a72; }
+  .day-badge.green { background: #d9f0e4; color: #1a5c38; }
+  .day-badge.coral { background: #fde4dd; color: #8c2a16; }
+  .day-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--ink);
+    line-height: 1.3;
+  }
+  .stops { display: flex; flex-direction: column; gap: 10px; }
+  .stop {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .stop-marker {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-shrink: 0;
+    padding-top: 4px;
+  }
+  .stop-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .stop-dot.blue { background: var(--ocean-light); }
+  .stop-dot.green { background: var(--palm-light); }
+  .stop-dot.amber { background: var(--sunset); }
+  .stop-dot.coral { background: var(--coral); }
+  .stop-dot.teal { background: #1d9e75; }
+  .stop-content { flex: 1; }
+  .stop-time { font-size: 11px; font-weight: 500; color: var(--ocean); margin-bottom: 1px; }
+  .stop-text { font-size: 13.5px; color: #374151; line-height: 1.55; }
+  .tag {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 500;
+    padding: 2px 7px;
+    border-radius: 4px;
+    margin-left: 5px;
+    vertical-align: middle;
+  }
+  .tag-kid { background: #d9f0e4; color: #1a5c38; }
+  .tag-book { background: #fde4dd; color: #8c2a16; }
+  .tip-row {
+    margin-top: 14px;
+    padding: 10px 14px;
+    background: #f0f9fc;
+    border-left: 3px solid var(--ocean-light);
+    border-radius: 0 8px 8px 0;
+    font-size: 12.5px;
+    color: #0a5a72;
+    line-height: 1.55;
+  }
+
+  /* ── FLIGHTS CARD ── */
+  .flights-card {
+    background: #f7fbfd;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+    margin-bottom: 36px;
+  }
+  .flights-card-header {
+    background: var(--ocean);
+    color: white;
+    padding: 14px 20px;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .flight-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--border);
+  }
+  .flight-row:last-child { border-bottom: none; }
+  .flight-date {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--ocean);
+    min-width: 52px;
+    padding-top: 1px;
+  }
+  .flight-detail { font-size: 13px; color: #374151; line-height: 1.5; flex: 1; }
+  .flight-detail strong { color: var(--ink); }
+
+  /* ── DIVIDER ── */
+  .divider {
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--border), transparent);
+    margin: 8px 0 40px;
+  }
+
+  /* ── COST SECTION ── */
+  .cost-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 24px; }
+  @media (max-width: 640px) { .cost-grid { grid-template-columns: 1fr; } }
+
+  .cost-card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 20px;
+  }
+  .cost-card-title {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 14px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+  }
+  .cost-line {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 7px 0;
+    border-bottom: 1px dashed rgba(10,110,138,0.1);
+    font-size: 13px;
+  }
+  .cost-line:last-child { border-bottom: none; }
+  .cost-line-label { color: #374151; flex: 1; line-height: 1.4; }
+  .cost-line-sub { font-size: 11px; color: var(--muted); display: block; }
+  .cost-line-val { font-weight: 600; color: var(--ink); white-space: nowrap; }
+  .cost-card-total {
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 2px solid var(--ocean);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 14px;
+  }
+  .cost-card-total-label { font-weight: 500; color: var(--ink); }
+  .cost-card-total-val { font-size: 1.15rem; font-weight: 700; color: var(--ocean); }
+
+  .grand-total-card {
+    background: linear-gradient(135deg, var(--ocean) 0%, #0d5c73 100%);
+    border-radius: 16px;
+    padding: 28px 32px;
+    color: white;
+    margin-bottom: 20px;
+  }
+  .grand-total-card h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    font-weight: 400;
+    opacity: 0.8;
+    margin-bottom: 6px;
+    letter-spacing: 0.04em;
+  }
+  .grand-amount {
+    font-size: 2.8rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+  .grand-range {
+    font-size: 13px;
+    opacity: 0.65;
+  }
+  .grand-breakdown {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255,255,255,0.2);
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+  .grand-item { font-size: 13px; opacity: 0.85; }
+  .grand-item strong { display: block; font-size: 16px; font-weight: 600; opacity: 1; }
+
+  /* ── TIPS CARD ── */
+  .tips-card {
+    background: #f0faf3;
+    border: 1px solid rgba(45,106,79,0.2);
+    border-radius: 14px;
+    padding: 20px 24px;
+    margin-bottom: 16px;
+  }
+  .tips-card h4 {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--palm);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .tips-list { display: flex; flex-direction: column; gap: 8px; }
+  .tip-item {
+    display: flex;
+    gap: 10px;
+    font-size: 13px;
+    color: #1e4a30;
+    line-height: 1.5;
+  }
+  .tip-num {
+    width: 20px; height: 20px;
+    border-radius: 50%;
+    background: var(--palm-light);
+    color: white;
+    font-size: 11px;
+    font-weight: 600;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  .booking-card {
+    background: #fff8ed;
+    border: 1px solid rgba(244,162,97,0.4);
+    border-radius: 14px;
+    padding: 20px 24px;
+  }
+  .booking-card h4 {
+    font-size: 13px;
+    font-weight: 600;
+    color: #7a4010;
+    margin-bottom: 12px;
+  }
+  .booking-list { display: flex; flex-direction: column; gap: 8px; }
+  .booking-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 13px;
+    padding: 8px 0;
+    border-bottom: 1px dashed rgba(244,162,97,0.3);
+  }
+  .booking-item:last-child { border-bottom: none; }
+  .booking-name { color: #374151; }
+  .booking-priority {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 9px;
+    border-radius: 12px;
+  }
+  .priority-urgent { background: #fde4dd; color: #8c2a16; }
+  .priority-soon { background: #fff3cd; color: #7a4010; }
+  .priority-flex { background: #d9f0e4; color: #1a5c38; }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--ink);
+    color: rgba(255,255,255,0.5);
+    text-align: center;
+    padding: 32px 24px;
+    font-size: 12px;
+    margin-top: 64px;
+  }
+  footer strong { color: rgba(255,255,255,0.8); }
+
+  /* ── PRINT ── */
+  @media print {
+    .hero { background: #0a6e8a !important; -webkit-print-color-adjust: exact; }
+    .nav-tabs { display: none; }
+    .day-card { break-inside: avoid; }
+    .island-header { break-before: page; }
+  }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .fade-up {
+    animation: fadeUp 0.5s ease both;
+  }
+  .fade-up:nth-child(2) { animation-delay: 0.08s; }
+  .fade-up:nth-child(3) { animation-delay: 0.16s; }
+  .fade-up:nth-child(4) { animation-delay: 0.24s; }
+
+  /* ── MAP SECTION ── */
+  .map-wrapper {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+    margin-bottom: 24px;
+    box-shadow: 0 4px 24px rgba(10,110,138,0.08);
+  }
+  #hawaii-map {
+    width: 100%;
+    height: 540px;
+    background: #c8e0e8;
+  }
+  .map-controls {
+    display: flex;
+    gap: 8px;
+    padding: 14px 18px;
+    background: #f7fbfd;
+    border-bottom: 1px solid var(--border);
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  .map-control-label {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-right: 6px;
+  }
+  .map-btn {
+    background: white;
+    border: 1px solid var(--border);
+    color: var(--ink);
+    font-size: 12px;
+    font-weight: 500;
+    padding: 6px 14px;
+    border-radius: 18px;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    transition: all 0.18s;
+  }
+  .map-btn:hover { background: #e0f4f9; border-color: var(--ocean-light); }
+  .map-btn.active { background: var(--ocean); color: white; border-color: var(--ocean); }
+  .map-btn.oahu.active { background: #0a6e8a; border-color: #0a6e8a; }
+  .map-btn.bigisland.active { background: #2d6a4f; border-color: #2d6a4f; }
+  .map-btn.maui.active { background: #c44d2e; border-color: #c44d2e; }
+
+  .map-legend {
+    padding: 14px 18px;
+    background: white;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 10px;
+    border-top: 1px solid var(--border);
+    font-size: 12px;
+  }
+  .legend-item { display: flex; align-items: center; gap: 8px; color: var(--ink); }
+  .legend-pin {
+    width: 14px; height: 14px;
+    border-radius: 50% 50% 50% 0;
+    transform: rotate(-45deg);
+    flex-shrink: 0;
+    border: 2px solid white;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+  }
+  .legend-pin.oahu { background: #0a6e8a; }
+  .legend-pin.bigisland { background: #2d6a4f; }
+  .legend-pin.maui { background: #c44d2e; }
+  .legend-pin.airport { background: #f4a261; }
+  .legend-pin.hotel { background: #6b46c1; }
+
+  /* Custom Leaflet popup styling */
+  .leaflet-popup-content-wrapper {
+    border-radius: 10px !important;
+    font-family: 'DM Sans', sans-serif !important;
+  }
+  .leaflet-popup-content {
+    margin: 12px 14px !important;
+    font-size: 13px !important;
+  }
+  .popup-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 4px;
+  }
+  .popup-meta {
+    font-size: 11px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 6px;
+  }
+  .popup-desc {
+    font-size: 12.5px;
+    color: #374151;
+    line-height: 1.5;
+  }
+  .popup-day {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 12px;
+    margin-bottom: 6px;
+  }
+  .popup-day.oahu { background: #ddf0f7; color: #0a5a72; }
+  .popup-day.bigisland { background: #d9f0e4; color: #1a5c38; }
+  .popup-day.maui { background: #fde4dd; color: #8c2a16; }
+
+  /* Custom div icon for pins */
+  .pin-icon {
+    width: 22px;
+    height: 22px;
+    border-radius: 50% 50% 50% 0;
+    transform: rotate(-45deg);
+    border: 2.5px solid white;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .pin-icon span {
+    transform: rotate(45deg);
+    color: white;
+    font-size: 10px;
+    font-weight: 700;
+  }
+  .pin-oahu { background: #0a6e8a; }
+  .pin-bigisland { background: #2d6a4f; }
+  .pin-maui { background: #c44d2e; }
+  .pin-airport { background: #f4a261; }
+  .pin-hotel { background: #6b46c1; }
+
+  .map-summary {
+    background: #f0f9fc;
+    border: 1px solid rgba(10,110,138,0.2);
+    border-radius: 12px;
+    padding: 16px 20px;
+    font-size: 13px;
+    color: #0a5a72;
+    line-height: 1.6;
+    margin-bottom: 24px;
+  }
+  .map-summary strong { color: #07475a; }
+
+  /* ── JOURNEY DIAGRAM ── */
+  .journey-wrap {
+    background: linear-gradient(180deg, #f7fbfd 0%, #ffffff 100%);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 28px 20px 20px;
+    margin-bottom: 32px;
+    overflow: hidden;
+  }
+  .journey-title {
+    text-align: center;
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 4px;
+  }
+  .journey-subtitle {
+    text-align: center;
+    font-size: 12px;
+    color: var(--muted);
+    margin-bottom: 24px;
+    letter-spacing: 0.04em;
+  }
+  .journey-svg-wrap {
+    position: relative;
+    width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+  }
+  .journey-svg {
+    display: block;
+    min-width: 780px;
+    width: 100%;
+    height: auto;
+  }
+  .journey-legend {
+    display: flex;
+    gap: 18px;
+    justify-content: center;
+    flex-wrap: wrap;
+    padding-top: 16px;
+    margin-top: 14px;
+    border-top: 1px dashed var(--border);
+    font-size: 11.5px;
+    color: var(--muted);
+  }
+  .journey-legend-item { display: flex; align-items: center; gap: 6px; }
+  .journey-legend-swatch {
+    width: 14px; height: 14px;
+    border-radius: 4px;
+    flex-shrink: 0;
+  }
+  .journey-scroll-hint {
+    display: none;
+    text-align: center;
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-top: 6px;
+  }
+  @media (max-width: 780px) {
+    .journey-scroll-hint { display: block; }
+  }
+
+  /* Stat pills under the journey */
+  .journey-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin-bottom: 32px;
+  }
+  @media (max-width: 560px) { .journey-stats { grid-template-columns: repeat(2, 1fr); } }
+
+  .journey-stat {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 12px;
+    text-align: center;
+  }
+  .journey-stat-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--ocean);
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .journey-stat-label {
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.04em;
+    line-height: 1.3;
+  }
+
+  /* ── HIGHLIGHTS SECTION (Visual Infographic Tiles) ── */
+  .highlights-hero {
+    background: linear-gradient(135deg, #0a6e8a 0%, #1a9bb5 40%, #40916c 100%);
+    border-radius: 20px;
+    padding: 36px 32px;
+    color: white;
+    margin-bottom: 28px;
+    position: relative;
+    overflow: hidden;
+  }
+  .highlights-hero::before {
+    content: '';
+    position: absolute;
+    top: -40px; right: -40px;
+    width: 180px; height: 180px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(245,230,200,0.25), transparent 70%);
+  }
+  .highlights-hero::after {
+    content: '';
+    position: absolute;
+    bottom: -60px; left: -60px;
+    width: 220px; height: 220px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(232,97,74,0.2), transparent 70%);
+  }
+  .highlights-hero h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.2rem;
+    font-weight: 700;
+    line-height: 1.1;
+    margin-bottom: 8px;
+    position: relative;
+  }
+  .highlights-hero p {
+    font-size: 14px;
+    opacity: 0.9;
+    font-weight: 300;
+    position: relative;
+  }
+
+  .feature-strip {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    gap: 12px;
+    margin-top: 20px;
+    position: relative;
+  }
+  .feature-box {
+    background: rgba(255,255,255,0.15);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.25);
+    border-radius: 12px;
+    padding: 14px 12px;
+    text-align: center;
+    color: white;
+  }
+  .feature-icon {
+    font-size: 22px;
+    margin-bottom: 6px;
+    display: block;
+  }
+  .feature-label {
+    font-size: 11px;
+    font-weight: 500;
+    line-height: 1.3;
+    opacity: 0.95;
+  }
+
+  /* Top Experiences Grid */
+  .xp-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+    margin-bottom: 36px;
+  }
+  @media (max-width: 700px) { .xp-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 440px) { .xp-grid { grid-template-columns: 1fr; } }
+
+  .xp-tile {
+    border-radius: 14px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    background: white;
+    transition: transform 0.25s, box-shadow 0.25s;
+    cursor: pointer;
+  }
+  .xp-tile:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 24px rgba(10,110,138,0.15);
+  }
+  .xp-illus {
+    height: 120px;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .xp-body {
+    padding: 12px 14px;
+    background: white;
+  }
+  .xp-island-tag {
+    display: inline-block;
+    font-size: 9.5px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 2px 7px;
+    border-radius: 10px;
+    margin-bottom: 4px;
+  }
+  .xp-island-tag.oahu { background: #ddf0f7; color: #0a5a72; }
+  .xp-island-tag.bigisland { background: #d9f0e4; color: #1a5c38; }
+  .xp-island-tag.maui { background: #fde4dd; color: #8c2a16; }
+  .xp-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--ink);
+    margin-bottom: 2px;
+    line-height: 1.25;
+  }
+  .xp-sub {
+    font-size: 11.5px;
+    color: var(--muted);
+    line-height: 1.4;
+  }
+
+  /* Three-panel highlight layout */
+  .panel-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-bottom: 28px;
+  }
+  @media (max-width: 640px) { .panel-grid { grid-template-columns: 1fr; } }
+
+  .hl-panel {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 20px 22px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hl-panel.accent-blue { background: linear-gradient(135deg, #f0f9fc 0%, #e0f4f9 100%); border-color: rgba(10,110,138,0.2); }
+  .hl-panel.accent-green { background: linear-gradient(135deg, #f0faf3 0%, #d9f0e4 100%); border-color: rgba(45,106,79,0.25); }
+  .hl-panel.accent-coral { background: linear-gradient(135deg, #fdf2ee 0%, #fde4dd 100%); border-color: rgba(196,77,46,0.25); }
+  .hl-panel.accent-sand { background: linear-gradient(135deg, #fdf7e8 0%, #f5e6c8 100%); border-color: rgba(244,162,97,0.3); }
+
+  .hl-panel-number {
+    position: absolute;
+    top: 12px; right: 18px;
+    font-family: 'Playfair Display', serif;
+    font-size: 3.5rem;
+    font-weight: 700;
+    opacity: 0.1;
+    line-height: 1;
+  }
+  .hl-panel-eyebrow {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ocean-light);
+    margin-bottom: 4px;
+  }
+  .hl-panel.accent-green .hl-panel-eyebrow { color: var(--palm); }
+  .hl-panel.accent-coral .hl-panel-eyebrow { color: #c44d2e; }
+  .hl-panel.accent-sand .hl-panel-eyebrow { color: #b8761f; }
+
+  .hl-panel h4 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 10px;
+    line-height: 1.2;
+  }
+  .hl-panel ul { list-style: none; padding: 0; }
+  .hl-panel ul li {
+    display: flex;
+    gap: 8px;
+    font-size: 12.5px;
+    color: #374151;
+    margin-bottom: 7px;
+    line-height: 1.45;
+  }
+  .hl-panel ul li::before {
+    content: '';
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--ocean);
+    margin-top: 6px;
+    flex-shrink: 0;
+  }
+  .hl-panel.accent-green ul li::before { background: var(--palm); }
+  .hl-panel.accent-coral ul li::before { background: #c44d2e; }
+  .hl-panel.accent-sand ul li::before { background: #b8761f; }
+  .hl-panel ul li strong { color: var(--ink); font-weight: 600; }
+
+  /* Essentials strip */
+  .essentials-strip {
+    background: var(--ink);
+    border-radius: 16px;
+    padding: 20px 24px;
+    color: white;
+    margin-bottom: 28px;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 24px;
+    align-items: center;
+  }
+  @media (max-width: 600px) { .essentials-strip { grid-template-columns: 1fr; gap: 14px; } }
+  .essentials-label {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    line-height: 1.2;
+    color: white;
+  }
+  .essentials-label span {
+    display: block;
+    font-size: 10px;
+    font-weight: 400;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    opacity: 0.6;
+    margin-bottom: 3px;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .essentials-items {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+    gap: 12px;
+  }
+  .essential-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    text-align: center;
+  }
+  .essential-icon {
+    font-size: 18px;
+  }
+  .essential-text {
+    font-size: 11px;
+    color: rgba(255,255,255,0.8);
+    line-height: 1.3;
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="hero-waves"></div>
+  <div class="hero-inner">
+    <div class="hero-badge">Family Travel Planner</div>
+    <h1>Aloha, <span>Hawaii!</span><br>July 2026</h1>
+    <p class="hero-sub">A 6-night family adventure across three islands — Oahu, Big Island &amp; Maui — planned for adults and kids.</p>
+    <div class="hero-pills">
+      <div class="pill"><span class="pill-dot"></span>Jul 26 – Aug 1, 2026</div>
+      <div class="pill"><span class="pill-dot"></span>3 Travelers · Mid-range</div>
+      <div class="pill"><span class="pill-dot"></span>6 Nights · Balanced Pace</div>
+      <div class="pill"><span class="pill-dot"></span>RDU → HNL → ITO → OGG → RDU</div>
+    </div>
+  </div>
+</header>
+
+<div class="container">
+
+  <!-- NAV -->
+  <nav class="nav-tabs">
+    <a class="nav-tab active" href="#overview">Overview</a>
+    <a class="nav-tab" href="#map">Map</a>
+    <a class="nav-tab" href="#highlights">Highlights</a>
+    <a class="nav-tab" href="#oahu">Oahu</a>
+    <a class="nav-tab" href="#bigisland">Big Island</a>
+    <a class="nav-tab" href="#maui">Maui</a>
+    <a class="nav-tab" href="#costs">Cost Estimate</a>
+    <a class="nav-tab" href="#booking">Booking Checklist</a>
+  </nav>
+
+  <!-- OVERVIEW -->
+  <section class="section" id="overview">
+    <div class="section-head">
+      <div class="section-eyebrow">Trip Overview</div>
+      <div class="section-title">Your Island Journey</div>
+    </div>
+
+    <!-- JOURNEY DIAGRAM -->
+    <div class="journey-wrap">
+      <div class="journey-title">Seven Days · Three Islands · One Adventure</div>
+      <div class="journey-subtitle">RDU → Oahu → Big Island → Maui → RDU</div>
+
+      <div class="journey-svg-wrap">
+        <svg class="journey-svg" viewBox="0 0 1000 360" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#e8f4f9"/>
+              <stop offset="100%" stop-color="#ffffff"/>
+            </linearGradient>
+            <linearGradient id="oahuGrad" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#1a9bb5"/>
+              <stop offset="100%" stop-color="#0a6e8a"/>
+            </linearGradient>
+            <linearGradient id="bigGrad" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#40916c"/>
+              <stop offset="100%" stop-color="#2d6a4f"/>
+            </linearGradient>
+            <linearGradient id="mauiGrad" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#e8614a"/>
+              <stop offset="100%" stop-color="#c44d2e"/>
+            </linearGradient>
+            <linearGradient id="homeGrad" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#b8b8c8"/>
+              <stop offset="100%" stop-color="#7a7a8a"/>
+            </linearGradient>
+
+            <filter id="softShadow" x="-20%" y="-20%" width="140%" height="140%">
+              <feGaussianBlur in="SourceAlpha" stdDeviation="2"/>
+              <feOffset dx="0" dy="2"/>
+              <feComponentTransfer><feFuncA type="linear" slope="0.15"/></feComponentTransfer>
+              <feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge>
+            </filter>
+
+            <marker id="arrowHead" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+              <path d="M0,0 L8,3 L0,6 Z" fill="#9aa5b1"/>
+            </marker>
+          </defs>
+
+          <rect width="1000" height="360" fill="url(#sky)" rx="12"/>
+
+          <path d="M 60,180 Q 200,80 340,180 Q 480,280 620,180 Q 760,80 900,180" fill="none" stroke="#d0e2ea" stroke-width="3" stroke-dasharray="4,6" opacity="0.7"/>
+
+          <g opacity="0.4">
+            <path d="M 20,320 Q 60,315 100,320 T 180,320" stroke="#a8d8e8" stroke-width="2" fill="none"/>
+            <path d="M 200,330 Q 240,325 280,330 T 360,330" stroke="#a8d8e8" stroke-width="2" fill="none"/>
+            <path d="M 400,320 Q 440,315 480,320 T 560,320" stroke="#a8d8e8" stroke-width="2" fill="none"/>
+            <path d="M 580,335 Q 620,330 660,335 T 740,335" stroke="#a8d8e8" stroke-width="2" fill="none"/>
+            <path d="M 760,325 Q 800,320 840,325 T 920,325" stroke="#a8d8e8" stroke-width="2" fill="none"/>
+          </g>
+
+          <line x1="120" y1="180" x2="200" y2="180" stroke="#9aa5b1" stroke-width="1.5" stroke-dasharray="3,4" marker-end="url(#arrowHead)"/>
+          <text x="160" y="172" text-anchor="middle" font-size="10" fill="#6b7280" font-family="DM Sans, sans-serif">✈ 11h</text>
+
+          <line x1="340" y1="180" x2="420" y2="180" stroke="#9aa5b1" stroke-width="1.5" stroke-dasharray="3,4" marker-end="url(#arrowHead)"/>
+          <text x="380" y="172" text-anchor="middle" font-size="10" fill="#6b7280" font-family="DM Sans, sans-serif">✈ 45min</text>
+
+          <line x1="560" y1="180" x2="640" y2="180" stroke="#9aa5b1" stroke-width="1.5" stroke-dasharray="3,4" marker-end="url(#arrowHead)"/>
+          <text x="600" y="172" text-anchor="middle" font-size="10" fill="#6b7280" font-family="DM Sans, sans-serif">✈ 90min</text>
+
+          <line x1="780" y1="180" x2="860" y2="180" stroke="#9aa5b1" stroke-width="1.5" stroke-dasharray="3,4" marker-end="url(#arrowHead)"/>
+          <text x="820" y="172" text-anchor="middle" font-size="10" fill="#6b7280" font-family="DM Sans, sans-serif">✈ 11h</text>
+
+          <g filter="url(#softShadow)">
+            <circle cx="80" cy="180" r="34" fill="url(#homeGrad)"/>
+            <path d="M 65,185 L 80,170 L 95,185 L 95,197 L 65,197 Z" fill="white" opacity="0.95"/>
+            <rect x="76" y="188" width="8" height="9" fill="#7a7a8a"/>
+            <text x="80" y="240" text-anchor="middle" font-size="13" font-weight="700" fill="#2d3561" font-family="Playfair Display, serif">Home</text>
+            <text x="80" y="256" text-anchor="middle" font-size="10" fill="#6b7280" font-family="DM Sans, sans-serif">East Coast</text>
+            <text x="80" y="270" text-anchor="middle" font-size="9" fill="#9aa5b1" font-family="DM Sans, sans-serif" letter-spacing="0.1em">JUL 26</text>
+          </g>
+
+          <g filter="url(#softShadow)">
+            <circle cx="270" cy="180" r="44" fill="url(#oahuGrad)"/>
+            <path d="M 250,192 L 260,180 L 270,188 L 280,172 L 290,180 L 290,198 L 250,198 Z" fill="white" opacity="0.95"/>
+            <circle cx="270" cy="170" r="5" fill="#ffd54f"/>
+            <text x="270" y="130" text-anchor="middle" font-size="10" font-weight="600" fill="#0a6e8a" font-family="DM Sans, sans-serif" letter-spacing="0.1em">DAYS 1–2</text>
+            <text x="270" y="250" text-anchor="middle" font-size="15" font-weight="700" fill="#0a6e8a" font-family="Playfair Display, serif">OAHU</text>
+            <text x="270" y="268" text-anchor="middle" font-size="11" fill="#374151" font-family="DM Sans, sans-serif">Honolulu · Waikiki</text>
+            <text x="270" y="286" text-anchor="middle" font-size="10" fill="#6b7280" font-family="DM Sans, sans-serif">Diamond Head</text>
+            <text x="270" y="300" text-anchor="middle" font-size="10" fill="#6b7280" font-family="DM Sans, sans-serif">Pearl Harbor</text>
+          </g>
+
+          <g filter="url(#softShadow)">
+            <circle cx="490" cy="180" r="44" fill="url(#bigGrad)"/>
+            <path d="M 470,195 L 485,165 L 495,175 L 505,160 L 515,195 Z" fill="white" opacity="0.95"/>
+            <ellipse cx="495" cy="168" rx="4" ry="6" fill="#ff6b35"/>
+            <circle cx="492" cy="163" r="2" fill="#ffd54f"/>
+            <text x="490" y="130" text-anchor="middle" font-size="10" font-weight="600" fill="#2d6a4f" font-family="DM Sans, sans-serif" letter-spacing="0.1em">DAYS 3–4</text>
+            <text x="490" y="250" text-anchor="middle" font-size="15" font-weight="700" fill="#2d6a4f" font-family="Playfair Display, serif">BIG ISLAND</text>
+            <text x="490" y="268" text-anchor="middle" font-size="11" fill="#374151" font-family="DM Sans, sans-serif">Hilo · Volcano · Kona</text>
+            <text x="490" y="286" text-anchor="middle" font-size="10" fill="#6b7280" font-family="DM Sans, sans-serif">Volcanoes NP</text>
+            <text x="490" y="300" text-anchor="middle" font-size="10" fill="#6b7280" font-family="DM Sans, sans-serif">Akaka Falls</text>
+          </g>
+
+          <g filter="url(#softShadow)">
+            <circle cx="710" cy="180" r="44" fill="url(#mauiGrad)"/>
+            <path d="M 705,165 Q 702,158 708,155 Q 714,152 715,160 Q 720,158 720,165 Q 724,167 720,172 Q 722,177 716,178 Q 712,184 708,180 Q 702,182 703,175 Q 698,172 702,168 Z" fill="white" opacity="0.95"/>
+            <circle cx="710" cy="168" r="3" fill="#ffd54f"/>
+            <text x="710" y="130" text-anchor="middle" font-size="10" font-weight="600" fill="#c44d2e" font-family="DM Sans, sans-serif" letter-spacing="0.1em">DAYS 5–6</text>
+            <text x="710" y="250" text-anchor="middle" font-size="15" font-weight="700" fill="#c44d2e" font-family="Playfair Display, serif">MAUI</text>
+            <text x="710" y="268" text-anchor="middle" font-size="11" fill="#374151" font-family="DM Sans, sans-serif">Lahaina · Kaanapali</text>
+            <text x="710" y="286" text-anchor="middle" font-size="10" fill="#6b7280" font-family="DM Sans, sans-serif">Haleakala Sunrise</text>
+            <text x="710" y="300" text-anchor="middle" font-size="10" fill="#6b7280" font-family="DM Sans, sans-serif">Iao Valley</text>
+          </g>
+
+          <g filter="url(#softShadow)">
+            <circle cx="920" cy="180" r="34" fill="url(#homeGrad)"/>
+            <path d="M 905,185 L 920,170 L 935,185 L 935,197 L 905,197 Z" fill="white" opacity="0.95"/>
+            <rect x="916" y="188" width="8" height="9" fill="#7a7a8a"/>
+            <text x="920" y="240" text-anchor="middle" font-size="13" font-weight="700" fill="#2d3561" font-family="Playfair Display, serif">Home</text>
+            <text x="920" y="256" text-anchor="middle" font-size="10" fill="#6b7280" font-family="DM Sans, sans-serif">Apex, NC</text>
+            <text x="920" y="270" text-anchor="middle" font-size="9" fill="#9aa5b1" font-family="DM Sans, sans-serif" letter-spacing="0.1em">AUG 1</text>
+          </g>
+
+          <text x="80" y="70" text-anchor="middle" font-size="10" fill="#9aa5b1" font-family="DM Sans, sans-serif" letter-spacing="0.15em">SAT</text>
+          <text x="80" y="50" text-anchor="middle" font-size="18" font-weight="700" fill="#2d3561" font-family="Playfair Display, serif">7/26</text>
+
+          <text x="270" y="70" text-anchor="middle" font-size="10" fill="#9aa5b1" font-family="DM Sans, sans-serif" letter-spacing="0.15em">SUN-MON</text>
+          <text x="270" y="50" text-anchor="middle" font-size="18" font-weight="700" fill="#0a6e8a" font-family="Playfair Display, serif">7/26 – 7/28</text>
+
+          <text x="490" y="70" text-anchor="middle" font-size="10" fill="#9aa5b1" font-family="DM Sans, sans-serif" letter-spacing="0.15em">TUE-WED</text>
+          <text x="490" y="50" text-anchor="middle" font-size="18" font-weight="700" fill="#2d6a4f" font-family="Playfair Display, serif">7/28 – 7/30</text>
+
+          <text x="710" y="70" text-anchor="middle" font-size="10" fill="#9aa5b1" font-family="DM Sans, sans-serif" letter-spacing="0.15em">THU-FRI</text>
+          <text x="710" y="50" text-anchor="middle" font-size="18" font-weight="700" fill="#c44d2e" font-family="Playfair Display, serif">7/30 – 8/1</text>
+
+          <text x="920" y="70" text-anchor="middle" font-size="10" fill="#9aa5b1" font-family="DM Sans, sans-serif" letter-spacing="0.15em">SAT</text>
+          <text x="920" y="50" text-anchor="middle" font-size="18" font-weight="700" fill="#2d3561" font-family="Playfair Display, serif">8/1</text>
+
+          <g opacity="0.8">
+            <path d="M 170,110 Q 172,105 174,110 Q 176,105 178,110" stroke="white" stroke-width="1.5" fill="none"/>
+            <path d="M 170,110 Q 174,115 178,110" stroke="white" stroke-width="1.5" fill="none"/>
+            <ellipse cx="174" cy="105" rx="6" ry="3" fill="white" opacity="0.7"/>
+
+            <path d="M 390,115 Q 392,110 394,115 Q 396,110 398,115" stroke="white" stroke-width="1.5" fill="none"/>
+            <ellipse cx="394" cy="108" rx="7" ry="3" fill="white" opacity="0.7"/>
+
+            <path d="M 610,105 Q 612,100 614,105 Q 616,100 618,105" stroke="white" stroke-width="1.5" fill="none"/>
+            <ellipse cx="614" cy="100" rx="6" ry="3" fill="white" opacity="0.7"/>
+
+            <path d="M 830,112 Q 832,107 834,112 Q 836,107 838,112" stroke="white" stroke-width="1.5" fill="none"/>
+            <ellipse cx="834" cy="105" rx="7" ry="3" fill="white" opacity="0.7"/>
+          </g>
+        </svg>
+      </div>
+
+      <div class="journey-scroll-hint">← Swipe to see full journey →</div>
+
+      <div class="journey-legend">
+        <div class="journey-legend-item"><div class="journey-legend-swatch" style="background:linear-gradient(135deg,#1a9bb5,#0a6e8a);"></div>Oahu</div>
+        <div class="journey-legend-item"><div class="journey-legend-swatch" style="background:linear-gradient(135deg,#40916c,#2d6a4f);"></div>Big Island</div>
+        <div class="journey-legend-item"><div class="journey-legend-swatch" style="background:linear-gradient(135deg,#e8614a,#c44d2e);"></div>Maui</div>
+        <div class="journey-legend-item"><span style="color:#9aa5b1;">✈</span>Flight time</div>
+      </div>
+    </div>
+
+    <!-- Journey stats -->
+    <div class="journey-stats">
+      <div class="journey-stat">
+        <div class="journey-stat-num">3</div>
+        <div class="journey-stat-label">Islands</div>
+      </div>
+      <div class="journey-stat">
+        <div class="journey-stat-num">6</div>
+        <div class="journey-stat-label">Nights</div>
+      </div>
+      <div class="journey-stat">
+        <div class="journey-stat-num">~13h</div>
+        <div class="journey-stat-label">Total Flight Time</div>
+      </div>
+      <div class="journey-stat">
+        <div class="journey-stat-num">20+</div>
+        <div class="journey-stat-label">Destinations</div>
+      </div>
+    </div>
+
+    <div class="route-bar">
+      <div class="route-node">RDU <span class="route-label">Jul 26</span></div>
+      <span class="route-arrow">→</span>
+      <div class="route-node">Oahu · 2 nights</div>
+      <span class="route-arrow">→</span>
+      <div class="route-node">Big Island · 2 nights</div>
+      <span class="route-arrow">→</span>
+      <div class="route-node">Maui · 2 nights</div>
+      <span class="route-arrow">→</span>
+      <div class="route-node">RDU <span class="route-label">Aug 1</span></div>
+    </div>
+
+    <div class="alert">
+      <strong>⚠ Book immediately — July is peak season.</strong> Pearl Harbor, Haleakala sunrise permits, Diamond Head entry, rental cars, and interisland flights all sell out weeks in advance. Every item below marked "Book Ahead" should be reserved as soon as possible.
+    </div>
+
+    <div class="flights-card">
+      <div class="flights-card-header">✈ Flight Schedule</div>
+      <div class="flight-row">
+        <div class="flight-date">Jul 26</div>
+        <div class="flight-detail"><strong>RDU → HNL (Oahu)</strong> — 1 stop via SFO or LAX, ~10–11 hrs. Aim for early morning departure to arrive by 2–3PM HST. Delta, United, or American.</div>
+      </div>
+      <div class="flight-row">
+        <div class="flight-date">Jul 28</div>
+        <div class="flight-detail"><strong>HNL → ITO (Big Island / Hilo)</strong> — Interisland on Southwest or Hawaiian Airlines, ~45 min. Morning flight recommended.</div>
+      </div>
+      <div class="flight-row">
+        <div class="flight-date">Jul 30</div>
+        <div class="flight-detail"><strong>KOA → OGG (Maui)</strong> — Interisland, may route via HNL. ~45–90 min total. Southwest or Hawaiian Airlines.</div>
+      </div>
+      <div class="flight-row">
+        <div class="flight-date">Aug 1</div>
+        <div class="flight-detail"><strong>OGG → RDU</strong> — Overnight or early morning connection. Arrive home Aug 1–2 EST. Pack the night before.</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- INTERACTIVE MAP -->
+  <section class="section" id="map">
+    <div class="section-head">
+      <div class="section-eyebrow">Interactive Map</div>
+      <div class="section-title">Where You'll Be</div>
+    </div>
+
+    <div class="map-summary">
+      <strong>Geography matters.</strong> The Hawaiian islands are spread across ~300 miles. From Honolulu to Hilo is ~220 miles — a 45-minute flight. Each island has its own distinct character: Oahu (urban + iconic), Big Island (volcanic + vast), Maui (lush + dramatic). Click any pin below to see details.
+    </div>
+
+    <div class="map-wrapper">
+      <div class="map-controls">
+        <span class="map-control-label">Filter:</span>
+        <button class="map-btn active" data-filter="all">All Stops</button>
+        <button class="map-btn oahu" data-filter="oahu">Oahu</button>
+        <button class="map-btn bigisland" data-filter="bigisland">Big Island</button>
+        <button class="map-btn maui" data-filter="maui">Maui</button>
+        <button class="map-btn" data-filter="airports">Airports Only</button>
+      </div>
+      <div id="hawaii-map"></div>
+      <div class="map-legend">
+        <div class="legend-item"><div class="legend-pin oahu"></div>Oahu sights</div>
+        <div class="legend-item"><div class="legend-pin bigisland"></div>Big Island sights</div>
+        <div class="legend-item"><div class="legend-pin maui"></div>Maui sights</div>
+        <div class="legend-item"><div class="legend-pin airport"></div>Airports</div>
+        <div class="legend-item"><div class="legend-pin hotel"></div>Hotels</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- VISUAL HIGHLIGHTS -->
+  <section class="section" id="highlights">
+    <div class="section-head">
+      <div class="section-eyebrow">At a Glance</div>
+      <div class="section-title">Visual Highlights</div>
+    </div>
+
+    <!-- Hero Banner -->
+    <div class="highlights-hero">
+      <h3>Best of Hawaii<br>Across Three Islands</h3>
+      <p>Beaches · Volcanoes · Waterfalls · Culture · Sunsets</p>
+      <div class="feature-strip">
+        <div class="feature-box">
+          <span class="feature-icon">🏖️</span>
+          <div class="feature-label">6 Nights Family Adventure</div>
+        </div>
+        <div class="feature-box">
+          <span class="feature-icon">🌋</span>
+          <div class="feature-label">Active Volcano Park</div>
+        </div>
+        <div class="feature-box">
+          <span class="feature-icon">🌅</span>
+          <div class="feature-label">Summit Sunrise Above Clouds</div>
+        </div>
+        <div class="feature-box">
+          <span class="feature-icon">🐢</span>
+          <div class="feature-label">Sea Turtles &amp; Snorkeling</div>
+        </div>
+        <div class="feature-box">
+          <span class="feature-icon">🏛️</span>
+          <div class="feature-label">WWII Historic Sites</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Top Experiences Grid -->
+    <h3 style="font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700;color:var(--ink);margin-bottom:14px;">Top 9 Experiences</h3>
+    <div class="xp-grid">
+
+      <div class="xp-tile" onclick="document.getElementById('oahu').scrollIntoView({behavior:'smooth'})">
+        <div class="xp-illus" style="background:linear-gradient(180deg,#87ceeb 0%,#4fa8c7 60%,#2d7d9a 100%);">
+          <svg width="100%" height="100%" viewBox="0 0 200 120" preserveAspectRatio="xMidYMid slice">
+            <path d="M0,80 L40,78 L80,40 L110,30 L140,55 L200,70 L200,120 L0,120 Z" fill="#3a5a3e" opacity="0.9"/>
+            <path d="M0,90 L50,88 L90,60 L130,55 L180,80 L200,82 L200,120 L0,120 Z" fill="#2d6a4f"/>
+            <path d="M0,110 Q50,105 100,112 T200,110 L200,120 L0,120 Z" fill="#4fa8c7" opacity="0.6"/>
+          </svg>
+        </div>
+        <div class="xp-body">
+          <span class="xp-island-tag oahu">Oahu</span>
+          <div class="xp-title">Diamond Head</div>
+          <div class="xp-sub">Volcanic crater hike with panoramic views</div>
+        </div>
+      </div>
+
+      <div class="xp-tile" onclick="document.getElementById('oahu').scrollIntoView({behavior:'smooth'})">
+        <div class="xp-illus" style="background:linear-gradient(180deg,#b8dde8 0%,#5fa9c4 100%);">
+          <svg width="100%" height="100%" viewBox="0 0 200 120" preserveAspectRatio="xMidYMid slice">
+            <rect x="60" y="55" width="80" height="18" rx="3" fill="white" opacity="0.95"/>
+            <rect x="68" y="60" width="8" height="8" fill="#5fa9c4"/>
+            <rect x="80" y="60" width="8" height="8" fill="#5fa9c4"/>
+            <rect x="92" y="60" width="8" height="8" fill="#5fa9c4"/>
+            <rect x="104" y="60" width="8" height="8" fill="#5fa9c4"/>
+            <rect x="116" y="60" width="8" height="8" fill="#5fa9c4"/>
+            <rect x="128" y="60" width="8" height="8" fill="#5fa9c4"/>
+            <line x1="100" y1="35" x2="100" y2="55" stroke="white" stroke-width="1.5"/>
+            <path d="M100,35 L115,40 L100,43 Z" fill="#c44d2e"/>
+            <path d="M0,75 Q50,72 100,78 T200,76 L200,120 L0,120 Z" fill="#5fa9c4"/>
+            <path d="M0,88 Q60,85 120,90 T200,88 L200,120 L0,120 Z" fill="#4a8aa5" opacity="0.7"/>
+          </svg>
+        </div>
+        <div class="xp-body">
+          <span class="xp-island-tag oahu">Oahu</span>
+          <div class="xp-title">Pearl Harbor</div>
+          <div class="xp-sub">USS Arizona Memorial &amp; WWII history</div>
+        </div>
+      </div>
+
+      <div class="xp-tile" onclick="document.getElementById('oahu').scrollIntoView({behavior:'smooth'})">
+        <div class="xp-illus" style="background:linear-gradient(180deg,#ffd89b 0%,#ff9966 60%,#f4a261 100%);">
+          <svg width="100%" height="100%" viewBox="0 0 200 120" preserveAspectRatio="xMidYMid slice">
+            <circle cx="150" cy="45" r="18" fill="#fff3d6" opacity="0.9"/>
+            <path d="M0,80 Q50,75 100,82 T200,78 L200,120 L0,120 Z" fill="#e8c89a"/>
+            <path d="M40,80 Q45,60 50,80 M45,58 Q35,50 30,55 M45,58 Q55,50 60,55 M45,58 Q40,45 45,42 M45,58 Q50,45 48,42" stroke="#4a7c5a" stroke-width="2" fill="none"/>
+            <path d="M160,78 Q165,55 170,78 M165,53 Q152,45 148,50 M165,53 Q178,45 182,50 M165,53 Q160,40 165,36" stroke="#4a7c5a" stroke-width="2" fill="none"/>
+          </svg>
+        </div>
+        <div class="xp-body">
+          <span class="xp-island-tag oahu">Oahu</span>
+          <div class="xp-title">Waikiki Beach</div>
+          <div class="xp-sub">Iconic beach &amp; sunset strolls</div>
+        </div>
+      </div>
+
+      <div class="xp-tile" onclick="document.getElementById('bigisland').scrollIntoView({behavior:'smooth'})">
+        <div class="xp-illus" style="background:linear-gradient(180deg,#2d1b2e 0%,#8b2d1e 50%,#d4552a 100%);">
+          <svg width="100%" height="100%" viewBox="0 0 200 120" preserveAspectRatio="xMidYMid slice">
+            <path d="M0,90 L60,50 L90,35 L120,48 L160,75 L200,85 L200,120 L0,120 Z" fill="#3d2419"/>
+            <path d="M85,35 Q88,22 95,28 Q100,18 105,28 Q112,22 115,38 Q120,30 118,42" stroke="#ffd700" stroke-width="2" fill="none" opacity="0.8"/>
+            <circle cx="95" cy="22" r="3" fill="#ffeb3b" opacity="0.9"/>
+            <circle cx="105" cy="18" r="2" fill="#ffeb3b" opacity="0.7"/>
+            <path d="M0,100 L200,95 L200,120 L0,120 Z" fill="#b53a1b"/>
+          </svg>
+        </div>
+        <div class="xp-body">
+          <span class="xp-island-tag bigisland">Big Island</span>
+          <div class="xp-title">Volcanoes National Park</div>
+          <div class="xp-sub">Active volcano, lava tubes &amp; craters</div>
+        </div>
+      </div>
+
+      <div class="xp-tile" onclick="document.getElementById('bigisland').scrollIntoView({behavior:'smooth'})">
+        <div class="xp-illus" style="background:linear-gradient(180deg,#4a7c5a 0%,#2d5a3d 100%);">
+          <svg width="100%" height="100%" viewBox="0 0 200 120" preserveAspectRatio="xMidYMid slice">
+            <path d="M0,0 L80,0 L85,30 L75,45 L80,70 L70,95 L60,120 L0,120 Z" fill="#1a3a2a"/>
+            <path d="M200,0 L120,0 L115,35 L125,50 L115,75 L125,100 L130,120 L200,120 Z" fill="#1a3a2a"/>
+            <path d="M95,20 Q93,50 97,80 Q100,100 95,115" stroke="#b8dde8" stroke-width="8" fill="none" opacity="0.9"/>
+            <path d="M95,20 Q93,50 97,80 Q100,100 95,115" stroke="white" stroke-width="4" fill="none" opacity="0.7"/>
+            <ellipse cx="95" cy="116" rx="25" ry="3" fill="#4a90a8" opacity="0.8"/>
+          </svg>
+        </div>
+        <div class="xp-body">
+          <span class="xp-island-tag bigisland">Big Island</span>
+          <div class="xp-title">Akaka Falls</div>
+          <div class="xp-sub">442-ft waterfall in bamboo rainforest</div>
+        </div>
+      </div>
+
+      <div class="xp-tile" onclick="document.getElementById('bigisland').scrollIntoView({behavior:'smooth'})">
+        <div class="xp-illus" style="background:linear-gradient(180deg,#2d5a7a 0%,#1a3d5a 100%);">
+          <svg width="100%" height="100%" viewBox="0 0 200 120" preserveAspectRatio="xMidYMid slice">
+            <path d="M0,60 L40,45 L80,55 L130,35 L180,50 L200,45 L200,85 L0,85 Z" fill="#5a8a4a" opacity="0.9"/>
+            <path d="M0,75 L50,65 L100,72 L150,60 L200,68 L200,90 L0,90 Z" fill="#3d6a2e"/>
+            <path d="M0,90 Q50,88 100,92 T200,90 L200,120 L0,120 Z" fill="#2a4a6a"/>
+            <path d="M0,100 Q60,95 120,102 T200,100 L200,120 L0,120 Z" fill="#1a3d5a"/>
+          </svg>
+        </div>
+        <div class="xp-body">
+          <span class="xp-island-tag bigisland">Big Island</span>
+          <div class="xp-title">Waipio Valley</div>
+          <div class="xp-sub">Sacred cliffside valley panorama</div>
+        </div>
+      </div>
+
+      <div class="xp-tile" onclick="document.getElementById('maui').scrollIntoView({behavior:'smooth'})">
+        <div class="xp-illus" style="background:linear-gradient(180deg,#ffa07a 0%,#ff6347 40%,#8b1a1a 100%);">
+          <svg width="100%" height="100%" viewBox="0 0 200 120" preserveAspectRatio="xMidYMid slice">
+            <circle cx="100" cy="55" r="28" fill="#fff8dc" opacity="0.95"/>
+            <circle cx="100" cy="55" r="22" fill="#ffd700" opacity="0.9"/>
+            <path d="M0,78 L30,70 L70,82 L120,68 L170,80 L200,75 L200,120 L0,120 Z" fill="#5a2a1a"/>
+            <path d="M0,88 L50,82 L100,90 L150,85 L200,88 L200,120 L0,120 Z" fill="#3d1a0f"/>
+          </svg>
+        </div>
+        <div class="xp-body">
+          <span class="xp-island-tag maui">Maui</span>
+          <div class="xp-title">Haleakala Sunrise</div>
+          <div class="xp-sub">10,000-ft summit above the clouds</div>
+        </div>
+      </div>
+
+      <div class="xp-tile" onclick="document.getElementById('maui').scrollIntoView({behavior:'smooth'})">
+        <div class="xp-illus" style="background:linear-gradient(180deg,#a8dadc 0%,#5fa9c4 100%);">
+          <svg width="100%" height="100%" viewBox="0 0 200 120" preserveAspectRatio="xMidYMid slice">
+            <path d="M0,50 L40,30 L90,42 L140,25 L200,40 L200,80 L0,80 Z" fill="#4a7c5a"/>
+            <path d="M0,60 L50,48 L100,55 L150,42 L200,55 L200,85 L0,85 Z" fill="#3d6a4a" opacity="0.9"/>
+            <ellipse cx="100" cy="105" rx="100" ry="18" fill="#d4c59a" opacity="0.8"/>
+            <path d="M0,85 Q50,82 100,88 T200,86 L200,110 L0,110 Z" fill="#5fa9c4" opacity="0.9"/>
+            <ellipse cx="60" cy="100" rx="6" ry="3" fill="#2a5a3a" opacity="0.7"/>
+            <ellipse cx="130" cy="102" rx="8" ry="4" fill="#2a5a3a" opacity="0.7"/>
+          </svg>
+        </div>
+        <div class="xp-body">
+          <span class="xp-island-tag maui">Maui</span>
+          <div class="xp-title">Kapalua &amp; Napili Bay</div>
+          <div class="xp-sub">Crystal-clear snorkeling &amp; sea turtles</div>
+        </div>
+      </div>
+
+      <div class="xp-tile" onclick="document.getElementById('maui').scrollIntoView({behavior:'smooth'})">
+        <div class="xp-illus" style="background:linear-gradient(180deg,#98d8a8 0%,#4a8c5a 100%);">
+          <svg width="100%" height="100%" viewBox="0 0 200 120" preserveAspectRatio="xMidYMid slice">
+            <path d="M85,20 L95,15 L105,22 L115,18 L108,35 L100,45 L92,38 Z" fill="#2d5a3a"/>
+            <path d="M95,45 L105,45 L100,110 Z" fill="#3d6a4a"/>
+            <path d="M0,0 L60,0 L70,40 L50,70 L60,110 L0,120 Z" fill="#2a4a3a" opacity="0.9"/>
+            <path d="M200,0 L140,0 L130,40 L150,70 L140,110 L200,120 Z" fill="#2a4a3a" opacity="0.9"/>
+            <path d="M0,115 Q50,112 100,118 T200,115 L200,120 L0,120 Z" fill="#4a7c5a"/>
+          </svg>
+        </div>
+        <div class="xp-body">
+          <span class="xp-island-tag maui">Maui</span>
+          <div class="xp-title">Iao Valley Needle</div>
+          <div class="xp-sub">Lush valley &amp; iconic 1,200-ft rock</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Kid-Friendly Highlights Panels -->
+    <h3 style="font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700;color:var(--ink);margin-bottom:14px;">Perfect for the Family</h3>
+    <div class="panel-grid">
+
+      <div class="hl-panel accent-blue">
+        <div class="hl-panel-number">01</div>
+        <div class="hl-panel-eyebrow">Kid Favorites</div>
+        <h4>Top Picks for a 10-Year-Old</h4>
+        <ul>
+          <li><strong>Thurston Lava Tube</strong> — walk through an ancient lava cave</li>
+          <li><strong>Akaka Falls</strong> — bamboo forest &amp; 442-ft waterfall</li>
+          <li><strong>Sea turtle snorkeling</strong> at Napili Bay</li>
+          <li><strong>Pearl Harbor</strong> — educational &amp; unforgettable</li>
+          <li><strong>Haleakala sunrise</strong> — above the clouds wow-factor</li>
+        </ul>
+      </div>
+
+      <div class="hl-panel accent-green">
+        <div class="hl-panel-number">02</div>
+        <div class="hl-panel-eyebrow">Hidden Gems</div>
+        <h4>Beyond the Obvious Spots</h4>
+        <ul>
+          <li><strong>Chain of Craters Road</strong> — 20-mile scenic lava drive</li>
+          <li><strong>Waipio Valley Lookout</strong> — no hike, epic view</li>
+          <li><strong>Rainbow Falls</strong> — a 5-min walk to a classic</li>
+          <li><strong>Maui Tropical Plantation</strong> — tram tour &amp; fruit tasting</li>
+          <li><strong>Whaler's Village boardwalk</strong> — shave ice by the sea</li>
+        </ul>
+      </div>
+
+      <div class="hl-panel accent-coral">
+        <div class="hl-panel-number">03</div>
+        <div class="hl-panel-eyebrow">Flavors of Hawaii</div>
+        <h4>Food Experiences to Try</h4>
+        <ul>
+          <li><strong>Poke bowls</strong> — fresh-caught fish, a Hawaiian staple</li>
+          <li><strong>Shave ice</strong> — tropical flavored ice (kid magnet)</li>
+          <li><strong>Malasadas</strong> at Leonard's Bakery, Oahu</li>
+          <li><strong>Kona coffee</strong> tasting on the Big Island</li>
+          <li><strong>Banana bread</strong> on the Hamakua Coast stops</li>
+        </ul>
+      </div>
+
+      <div class="hl-panel accent-sand">
+        <div class="hl-panel-number">04</div>
+        <div class="hl-panel-eyebrow">Scenic Moments</div>
+        <h4>Golden Hour Highlights</h4>
+        <ul>
+          <li><strong>Kaanapali Beach sunset</strong> over Molokai</li>
+          <li><strong>Volcano glow</strong> at Halema'uma'u at dusk</li>
+          <li><strong>Diamond Head summit</strong> morning light</li>
+          <li><strong>Haleakala summit</strong> sunrise (2:30 AM departure)</li>
+          <li><strong>Sunset snorkel cruise</strong> from Lahaina Harbor</li>
+        </ul>
+      </div>
+
+    </div>
+
+    <!-- Essentials Strip -->
+    <div class="essentials-strip">
+      <div class="essentials-label">
+        <span>Pack the</span>
+        Island Essentials
+      </div>
+      <div class="essentials-items">
+        <div class="essential-item">
+          <span class="essential-icon">📸</span>
+          <span class="essential-text">Camera</span>
+        </div>
+        <div class="essential-item">
+          <span class="essential-icon">🧴</span>
+          <span class="essential-text">Reef-safe sunscreen</span>
+        </div>
+        <div class="essential-item">
+          <span class="essential-icon">🕶️</span>
+          <span class="essential-text">Sunglasses</span>
+        </div>
+        <div class="essential-item">
+          <span class="essential-icon">👟</span>
+          <span class="essential-text">Hiking shoes</span>
+        </div>
+        <div class="essential-item">
+          <span class="essential-icon">💧</span>
+          <span class="essential-text">Water bottle</span>
+        </div>
+        <div class="essential-item">
+          <span class="essential-icon">🧥</span>
+          <span class="essential-text">Layers (Haleakala)</span>
+        </div>
+        <div class="essential-item">
+          <span class="essential-icon">🩱</span>
+          <span class="essential-text">Swimwear</span>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- OAHU -->
+  <section class="section" id="oahu">
+    <div class="island-header">
+      <div class="island-icon blue">🌊</div>
+      <div class="island-label-group">
+        <h3>Oahu — The Gathering Place</h3>
+        <p>2 nights · Jul 26–28 · Stay in Waikiki</p>
+      </div>
+    </div>
+
+    <div class="day-card fade-up">
+      <div class="day-card-top">
+        <span class="day-badge blue">Day 1 · Sun Jul 26</span>
+        <div class="day-title">Arrive &amp; Ease In</div>
+      </div>
+      <div class="stops">
+        <div class="stop">
+          <div class="stop-marker"><div class="stop-dot amber"></div></div>
+          <div class="stop-content">
+            <div class="stop-time">2–3 PM HST</div>
+            <div class="stop-text">Land at HNL. Collect bags, pick up rental car. Drive to Waikiki (~35 min). Check in to hotel — <em>Ilikai Hotel</em> or <em>Outrigger Waikiki</em> are solid mid-range picks.</div>
+          </div>
+        </div>
+        <div class="stop">
+          <div class="stop-marker"><div class="stop-dot blue"></div></div>
+          <div class="stop-content">
+            <div class="stop-time">4–6 PM</div>
+            <div class="stop-text">First look at the Pacific — stroll Waikiki Beach. Let your daughter dip her feet in. Simple, low-key, perfect after 11 hours of travel. <span class="tag tag-kid">kid-friendly</span></div>
+          </div>
+        </div>
+        <div class="stop">
+          <div class="stop-marker"><div class="stop-dot green"></div></div>
+          <div class="stop-content">
+            <div class="stop-time">7 PM</div>
+            <div class="stop-text">Relaxed dinner near the hotel. Try <em>Barefoot Beach Café</em> or plate lunch from a local spot. Early bedtime — 6-hour time difference hits hard.</div>
+          </div>
+        </div>
+      </div>
+      <div class="tip-row">💡 Keep Day 1 very light. Jet lag from EST → HST is significant. A well-rested family on Day 2 is worth more than any extra sightseeing tonight.</div>
+    </div>
+
+    <div class="day-card fade-up">
+      <div class="day-card-top">
+        <span class="day-badge blue">Day 2 · Mon Jul 27</span>
+        <div class="day-title">Diamond Head + Pearl Harbor</div>
+      </div>
+      <div class="stops">
+        <div class="stop">
+          <div class="stop-marker"><div class="stop-dot blue"></div></div>
+          <div class="stop-content">
+            <div class="stop-time">7:30 AM</div>
+            <div class="stop-text">Quick breakfast, head to Diamond Head Crater. Arrive by 8:30 AM before the heat peaks. 1.6-mile hike, ~1.5 hrs, paved but steep near the top. Views are spectacular. <span class="tag tag-kid">kid-friendly</span> <span class="tag tag-book">Book ahead at recreation.gov</span></div>
+          </div>
+        </div>
+        <div class="stop">
+          <div class="stop-marker"><div class="stop-dot amber"></div></div>
+          <div class="stop-content">
+            <div class="stop-time">10:30 AM</div>
+            <div class="stop-text">Post-hike snack / lunch break. Grab shave ice on the way back — Leonard's Bakery for malasadas if passing by!</div>
+          </div>
+        </div>
+        <div class="stop">
+          <div class="stop-marker"><div class="stop-dot coral"></div></div>
+          <div class="stop-content">
+            <div class="stop-time">12:30 PM</div>
+            <div class="stop-text">Pearl Harbor National Memorial. Audio tour of the USS Arizona Memorial is deeply moving — highly educational for a 10-year-old. Allow 2.5–3 hrs. <span class="tag tag-book">Reserve free timed entry at recreation.gov</span></div>
+          </div>
+        </div>
+        <div class="stop">
+          <div class="stop-marker"><div class="stop-dot blue"></div></div>
+          <div class="stop-content">
+            <div class="stop-time">4 PM</div>
+            <div class="stop-text">Return to Waikiki. Hotel pool or beach to decompress. Let your daughter play in the water. <span class="tag tag-kid">kid-friendly</span></div>
+          </div>
+        </div>
+        <div class="stop">
+          <div class="stop-marker"><div class="stop-dot green"></div></div>
+          <div class="stop-content">
+            <div class="stop-time">6:30 PM</div>
+            <div class="stop-text">Dinner at <em>Tropics Bar &amp; Grill</em> (Hilton Hawaiian Village) — open-air, oceanfront, casual. Or explore Kalakaua Avenue food options.</div>
+          </div>
+        </div>
+      </div>
+      <div class="tip-row">💡 Pearl Harbor timed-entry tickets are free but mandatory — book the 1 PM slot now at recreation.gov. They sell out 2–3 months ahead in summer.</div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- BIG ISLAND -->
+  <section class="section" id="bigisland">
+    <div class="island-header">
+      <div class="island-icon green">🌋</div>
+      <div class="island-label-group">
+        <h3>Big Island — Fire &amp; Water</h3>
+        <p>2 nights · Jul 28–30 · Stay near Volcano Village, then Kona</p>
+      </div>
+    </div>
+
+    <div class="day-card fade-up">
+      <div class="day-card-top">
+        <span class="day-badge green">Day 3 · Tue Jul 28</span>
+        <div class="day-title">Fly to Big Island + Volcanoes National Park</div>
+      </div>
+      <div class="stops">
+        <div class="stop">
+          <div class="stop-marker"><div class="stop-dot amber"></div></div>
+          <div class="stop-content">
+            <div class="stop-time">Morning</div>
+            <div class="stop-text">Early flight HNL → ITO (Hilo). Pick up rental car at Hilo airport. Grab lunch at <em>Kamana Kitchen</em> (1235 Kilauea Ave — authentic, excellent).</div>
+          </div>
+        </div>
+        <div class="stop">
+          <div class="stop-marker"><div class="stop-dot green"></div></div>
+          <div class="stop-content">
+            <div class="stop-time">1 PM</div>
+            <div class="stop-text">Hawaii Volcanoes National Park. Start at <strong>Kilauea Visitor Center</strong> — great intro exhibits and maps. Then walk to <strong>Kilauea Iki Overlook</strong> for a jaw-dropping crater view. <span class="tag tag-kid">kid-friendly</span></div>
+          </div>
+        </div>
+        <div class="stop">
+          <div class="stop-marker"><div class="stop-dot teal"></div></div>
+          <div class="stop-content">
+            <div class="stop-time">2:30 PM</div>
+            <div class="stop-text"><strong>Thurston Lava Tube</strong> — a short walk through a dramatic ancient lava cave. Completely safe, well-lit, and kids absolutely love it. One of the best 20 minutes of the trip. <span class="tag tag-kid">kid-friendly</span></div>
+          </div>
+        </div>
+        <div class="stop">
+          <div class="stop-marker"><div class="stop-dot blue"></div></div>
+          <div class="stop-content">
+            <div class="stop-time">4 PM</div>
+            <div class="stop-text">Drive <strong>Chain of Craters Road</strong> — 20-mile scenic road through ancient lava flows to the ocean. Surreal landscape, stunning at golden hour. Stop at steam vents.</div>
+          </div>
+        </div>
+        <div class="stop">
+          <div class="stop-marker"><div class="stop-dot green"></div></div>
+          <div class="stop-content">
+            <div class="stop-time">7 PM</div>
+            <div class="stop-text">Dinner at <em>The Rim</em> restaurant at Volcano House — perched on the caldera rim, views of Halema'uma'u crater are extraordinary. <span class="tag tag-book">Reserve ahead</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="tip-row">💡 Stay at Volcano House or a Volcano Village B&amp;B — you're inside the national park, making early morning lava glow views easy to catch before the crowds.</div>
+    </div>
+
+    <div class="day-card fade-up">
+      <div class="day-card-top">
+        <span class="day-badge green">Day 4 · Wed Jul 29</span>
+        <div class="day-title">Waterfalls + Waipio + Drive to Kona</div>
+      </div>
+      <div class="stops">
+        <div class="stop">
+          <div class="stop-marker"><div class="stop-dot blue"></div></div>
+          <div class="stop-content">
+            <div class="stop-time">8 AM</div>
+            <div class="stop-text"><strong>Rainbow Falls</strong> in Hilo — 5-minute walk to a 80-foot waterfall. Best visited in the morning when rainbows form in the mist. Your daughter will love it. <span class="tag tag-kid">kid-friendly</span></div>
+          </div>
+        </div>
+        <div class="stop">
+          <div class="stop-marker"><div class="stop-dot blue"></div></div>
+          <div class="stop-content">
+            <div class="stop-time">9:30 AM</div>
+            <div class="stop-text"><strong>Akaka Falls State Park</strong> — a gorgeous 0.4-mile loop trail through bamboo and rainforest to two dramatic waterfalls (Akaka at 442 ft). One of Hawaii's finest. <span class="tag tag-kid">kid-friendly</span></div>
+          </div>
+        </div>
+        <div class="stop">
+          <div class="stop-marker"><div class="stop-dot amber"></div></div>
+          <div class="stop-content">
+            <div class="stop-time">11:30 AM</div>
+            <div class="stop-text">Grab lunch on the way. Begin the scenic Hamakua Coast drive toward Waimea (~1 hr north).</div>
+          </div>
+        </div>
+        <div class="stop">
+          <div class="stop-marker"><div class="stop-dot teal"></div></div>
+          <div class="stop-content">
+            <div class="stop-time">1:30 PM</div>
+            <div class="stop-text"><strong>Waipio Valley Lookout</strong> — pull over for a breathtaking panorama of a sacred valley, black sand beach, and waterfalls — no hike needed. <span class="tag tag-kid">kid-friendly</span></div>
+          </div>
+        </div>
+        <div class="stop">
+          <div class="stop-marker"><div class="stop-dot coral"></div></div>
+          <div class="stop-content">
+            <div class="stop-time">3 PM</div>
+            <div class="stop-text">Drive to Kona (~2 hrs via Highway 19). Check in at <em>Aston Kona by the Sea</em> — solid mid-range, ocean view lanais.</div>
+          </div>
+        </div>
+        <div class="stop">
+          <div class="stop-marker"><div class="stop-dot green"></div></div>
+          <div class="stop-content">
+            <div class="stop-time">7 PM</div>
+            <div class="stop-text">Dinner at <em>Swami's Dosa Grill</em> in Kona — authentic South Indian vegetarian cuisine. Great option for the family.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- MAUI -->
+  <section class="section" id="maui">
+    <div class="island-header">
+      <div class="island-icon coral">🌺</div>
+      <div class="island-label-group">
+        <h3>Maui — The Valley Isle</h3>
+        <p>2 nights · Jul 30 – Aug 1 · Stay near Lahaina / Kaanapali</p>
+      </div>
+    </div>
+
+    <div class="day-card fade-up">
+      <div class="day-card-top">
+        <span class="day-badge coral">Day 5 · Thu Jul 30</span>
+        <div class="day-title">Fly to Maui + North Shore + Kaanapali</div>
+      </div>
+      <div class="stops">
+        <div class="stop">
+          <div class="stop-marker"><div class="stop-dot amber"></div></div>
+          <div class="stop-content">
+            <div class="stop-time">Morning</div>
+            <div class="stop-text">Morning flight KOA → OGG (possibly via HNL). Pick up rental car at Kahului airport. Check in to hotel near Lahaina.</div>
+          </div>
+        </div>
+        <div class="stop">
+          <div class="stop-marker"><div class="stop-dot blue"></div></div>
+          <div class="stop-content">
+            <div class="stop-time">1 PM</div>
+            <div class="stop-text"><strong>Kapalua Bay</strong> or <strong>Napili Bay</strong> — calm, crystal-clear, shallow water. Some of the best family-friendly snorkeling on Maui. Bring rented snorkel gear — sea turtles are common here! <span class="tag tag-kid">kid-friendly</span></div>
+          </div>
+        </div>
+        <div class="stop">
+          <div class="stop-marker"><div class="stop-dot teal"></div></div>
+          <div class="stop-content">
+            <div class="stop-time">3:30 PM</div>
+            <div class="stop-text"><strong>Whaler's Village</strong> on Kaanapali Beach — open-air shopping, shave ice, and a lovely ocean boardwalk. Casual and very kid-friendly. <span class="tag tag-kid">kid-friendly</span></div>
+          </div>
+        </div>
+        <div class="stop">
+          <div class="stop-marker"><div class="stop-dot coral"></div></div>
+          <div class="stop-content">
+            <div class="stop-time">6 PM</div>
+            <div class="stop-text">Sunset on Kaanapali Beach — one of the finest sunsets in Hawaii. The sky turns deep orange over the ocean and the island of Molokai.</div>
+          </div>
+        </div>
+        <div class="stop">
+          <div class="stop-marker"><div class="stop-dot green"></div></div>
+          <div class="stop-content">
+            <div class="stop-time">7 PM</div>
+            <div class="stop-text">Dinner at <em>Leilani's on the Beach</em> — oceanfront, open-air, excellent fresh fish and kid-friendly burgers. Casual and beautiful.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="day-card fade-up">
+      <div class="day-card-top">
+        <span class="day-badge coral">Day 6 · Fri Jul 31</span>
+        <div class="day-title">Haleakala Sunrise + Iao Valley + Evening Cruise</div>
+      </div>
+      <div class="stops">
+        <div class="stop">
+          <div class="stop-marker"><div class="stop-dot teal"></div></div>
+          <div class="stop-content">
+            <div class="stop-time">2:30 AM</div>
+            <div class="stop-text"><strong>Haleakala Sunrise</strong> — drive to the 10,023-ft summit (2 hrs from Lahaina). Watch the sun rise above the clouds over a Martian volcanic landscape. One of the most unforgettable experiences in all of Hawaii. Bring warm layers — it's 40°F at the top. <span class="tag tag-book">Sunrise permits sell out weeks ahead — recreation.gov</span></div>
+          </div>
+        </div>
+        <div class="stop">
+          <div class="stop-marker"><div class="stop-dot blue"></div></div>
+          <div class="stop-content">
+            <div class="stop-time">7–10 AM</div>
+            <div class="stop-text">Return to hotel. Sleep / rest — this is intentional recovery time before the afternoon. The early wake-up is worth it, but rest is essential.</div>
+          </div>
+        </div>
+        <div class="stop">
+          <div class="stop-marker"><div class="stop-dot green"></div></div>
+          <div class="stop-content">
+            <div class="stop-time">11 AM</div>
+            <div class="stop-text"><strong>Iao Valley State Monument</strong> — lush, dramatic valley with the 1,200-ft Iao Needle. Easy 0.6-mile paved trail. Kids love the green peaks rising from the mist. <span class="tag tag-kid">kid-friendly</span></div>
+          </div>
+        </div>
+        <div class="stop">
+          <div class="stop-marker"><div class="stop-dot amber"></div></div>
+          <div class="stop-content">
+            <div class="stop-time">1:30 PM</div>
+            <div class="stop-text"><strong>Maui Tropical Plantation</strong> — fun tram tour through a working plantation in Wailuku. Pineapples, coffee, macadamia nuts. Very family-friendly and educational. <span class="tag tag-kid">kid-friendly</span></div>
+          </div>
+        </div>
+        <div class="stop">
+          <div class="stop-marker"><div class="stop-dot blue"></div></div>
+          <div class="stop-content">
+            <div class="stop-time">5 PM</div>
+            <div class="stop-text">Optional: <strong>Sunset Snorkel Cruise</strong> from Lahaina Harbor — family-friendly 2-hr sailing trip. Several operators (Trilogy, Pride of Maui). Great final evening activity. <span class="tag tag-book">Book ahead</span></div>
+          </div>
+        </div>
+        <div class="stop">
+          <div class="stop-marker"><div class="stop-dot green"></div></div>
+          <div class="stop-content">
+            <div class="stop-time">8 PM</div>
+            <div class="stop-text">Final Hawaiian dinner in Lahaina. Pack bags tonight for early morning departure.</div>
+          </div>
+        </div>
+      </div>
+      <div class="tip-row">💡 Haleakala sunrise permits at recreation.gov typically sell out 2–3 months in advance. Book this first, before anything else on this list.</div>
+    </div>
+
+    <div class="day-card fade-up">
+      <div class="day-card-top">
+        <span class="day-badge coral">Day 7 · Sat Aug 1</span>
+        <div class="day-title">Fly Home</div>
+      </div>
+      <div class="stops">
+        <div class="stop">
+          <div class="stop-marker"><div class="stop-dot amber"></div></div>
+          <div class="stop-content">
+            <div class="stop-time">Morning</div>
+            <div class="stop-text">Light breakfast, return rental car at OGG airport. Fly OGG → RDU (overnight or early morning with connection). Arrive home Aug 1–2 EST. Mahalo!</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- COST ESTIMATE -->
+  <section class="section" id="costs">
+    <div class="section-head">
+      <div class="section-eyebrow">Budget Estimate</div>
+      <div class="section-title">Flights &amp; Rental Cars</div>
+    </div>
+
+    <div class="cost-grid">
+      <!-- Mainland Flights -->
+      <div class="cost-card">
+        <div class="cost-card-title">✈ Mainland Flights — RDU ↔ HNL/OGG</div>
+        <div class="cost-line">
+          <div class="cost-line-label">
+            2 adults — economy round trip
+            <span class="cost-line-sub">United / Delta / American via SFO or LAX. July peak ~$820/person.</span>
+          </div>
+          <div class="cost-line-val">$1,640</div>
+        </div>
+        <div class="cost-line">
+          <div class="cost-line-label">
+            1 child (10 yrs) — economy
+            <span class="cost-line-sub">Children 2+ pay full adult fare on most US airlines.</span>
+          </div>
+          <div class="cost-line-val">$820</div>
+        </div>
+        <div class="cost-line">
+          <div class="cost-line-label">
+            Checked bags (1 per person, both legs)
+            <span class="cost-line-sub">~$35/bag on Delta/United. Southwest includes 2 free bags.</span>
+          </div>
+          <div class="cost-line-val">$210</div>
+        </div>
+        <div class="cost-card-total">
+          <span class="cost-card-total-label">Subtotal</span>
+          <span class="cost-card-total-val">$2,670</span>
+        </div>
+      </div>
+
+      <!-- Interisland Flights -->
+      <div class="cost-card">
+        <div class="cost-card-title">🏝 Interisland Flights (3 pax × 2 hops)</div>
+        <div class="cost-line">
+          <div class="cost-line-label">
+            HNL → ITO (Oahu to Big Island, Jul 28)
+            <span class="cost-line-sub">Southwest or Hawaiian. Starting ~$59/person in July.</span>
+          </div>
+          <div class="cost-line-val">$210</div>
+        </div>
+        <div class="cost-line">
+          <div class="cost-line-label">
+            KOA → OGG (Kona to Maui, Jul 30)
+            <span class="cost-line-sub">May route via HNL. Southwest or Hawaiian. ~$80–100/person.</span>
+          </div>
+          <div class="cost-line-val">$270</div>
+        </div>
+        <div class="cost-card-total">
+          <span class="cost-card-total-label">Subtotal</span>
+          <span class="cost-card-total-val">$480</span>
+        </div>
+      </div>
+
+      <!-- Rental Cars -->
+      <div class="cost-card" style="grid-column: 1 / -1;">
+        <div class="cost-card-title">🚗 Rental Cars — 3 Islands (July Peak: $55–$85/day all-in)</div>
+        <div class="cost-line">
+          <div class="cost-line-label">
+            Oahu — 2 days (Jul 26–28)
+            <span class="cost-line-sub">Economy/compact. HNL airport pickup. ~$75/day with taxes &amp; fees.</span>
+          </div>
+          <div class="cost-line-val">$150</div>
+        </div>
+        <div class="cost-line">
+          <div class="cost-line-label">
+            Big Island — 2 days (Jul 28–30)
+            <span class="cost-line-sub">Hilo pickup, Kona drop. One-way fee may add $50–100. ~$80/day.</span>
+          </div>
+          <div class="cost-line-val">$160</div>
+        </div>
+        <div class="cost-line">
+          <div class="cost-line-label">
+            Maui — 2 days (Jul 30 – Aug 1)
+            <span class="cost-line-sub">Kahului (OGG) pickup and drop. ~$80/day in July peak.</span>
+          </div>
+          <div class="cost-line-val">$160</div>
+        </div>
+        <div class="cost-card-total">
+          <span class="cost-card-total-label">Subtotal</span>
+          <span class="cost-card-total-val">$470</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Grand Total -->
+    <div class="grand-total-card">
+      <h3>Total estimated — flights &amp; cars</h3>
+      <div class="grand-amount">$3,620</div>
+      <div class="grand-range">Realistic range: $3,200 – $4,200 depending on fares locked in</div>
+      <div class="grand-breakdown">
+        <div class="grand-item"><strong>$2,670</strong>Mainland flights</div>
+        <div class="grand-item"><strong>$480</strong>Interisland flights</div>
+        <div class="grand-item"><strong>$470</strong>Rental cars</div>
+        <div class="grand-item"><strong>Hotels TBD</strong>Check separately</div>
+      </div>
+    </div>
+
+    <!-- Tips -->
+    <div class="tips-card">
+      <h4>💰 Money-Saving Tips</h4>
+      <div class="tips-list">
+        <div class="tip-item">
+          <div class="tip-num">1</div>
+          <div>Book Southwest for interisland — they frequently have $59 fares and include 2 free checked bags per person, saving ~$200 in baggage fees on the mainland leg too.</div>
+        </div>
+        <div class="tip-item">
+          <div class="tip-num">2</div>
+          <div>Book rental cars through <strong>Costco Travel</strong> or <strong>AutoSlash</strong> — can save 15–25% vs. booking direct, especially in peak season.</div>
+        </div>
+        <div class="tip-item">
+          <div class="tip-num">3</div>
+          <div>Use a credit card with travel insurance (Chase Sapphire, Amex Platinum) to skip the rental CDW — that's ~$15–20/day saved per car.</div>
+        </div>
+        <div class="tip-item">
+          <div class="tip-num">4</div>
+          <div>Avoid one-way car rentals on the Big Island (Hilo pickup / Kona drop) if possible — the one-way fee can add $50–100. Consider dropping the car in Hilo and taking a shuttle to your Kona hotel.</div>
+        </div>
+        <div class="tip-item">
+          <div class="tip-num">5</div>
+          <div>July is the single most expensive month for Hawaii travel — booking now (April 2026) vs. waiting 6–8 weeks could save $200–400 on the mainland flight alone.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- BOOKING CHECKLIST -->
+  <section class="section" id="booking">
+    <div class="section-head">
+      <div class="section-eyebrow">Action Items</div>
+      <div class="section-title">Booking Checklist</div>
+    </div>
+
+    <div class="booking-card">
+      <h4>📋 Book in this order — most urgent first</h4>
+      <div class="booking-list">
+        <div class="booking-item">
+          <span class="booking-name">Haleakala Sunrise Permit (recreation.gov) — all 3</span>
+          <span class="booking-priority priority-urgent">Book Today</span>
+        </div>
+        <div class="booking-item">
+          <span class="booking-name">Mainland flights RDU → HNL, OGG → RDU</span>
+          <span class="booking-priority priority-urgent">Book Today</span>
+        </div>
+        <div class="booking-item">
+          <span class="booking-name">Pearl Harbor timed entry (recreation.gov) — free, 3 tickets</span>
+          <span class="booking-priority priority-urgent">Book Today</span>
+        </div>
+        <div class="booking-item">
+          <span class="booking-name">Interisland flights HNL → ITO and KOA → OGG</span>
+          <span class="booking-priority priority-urgent">This Week</span>
+        </div>
+        <div class="booking-item">
+          <span class="booking-name">Rental cars — all 3 islands (use Costco Travel)</span>
+          <span class="booking-priority priority-urgent">This Week</span>
+        </div>
+        <div class="booking-item">
+          <span class="booking-name">Hotels — Waikiki, Volcano area, Kona, Lahaina</span>
+          <span class="booking-priority priority-soon">This Week</span>
+        </div>
+        <div class="booking-item">
+          <span class="booking-name">Diamond Head entry (recreation.gov)</span>
+          <span class="booking-priority priority-soon">2–3 Weeks</span>
+        </div>
+        <div class="booking-item">
+          <span class="booking-name">Volcano House dinner at The Rim (restaurant.com)</span>
+          <span class="booking-priority priority-soon">2–3 Weeks</span>
+        </div>
+        <div class="booking-item">
+          <span class="booking-name">Sunset snorkel cruise from Lahaina Harbor</span>
+          <span class="booking-priority priority-soon">1 Month Out</span>
+        </div>
+        <div class="booking-item">
+          <span class="booking-name">Volcanoes National Park entry pass (America the Beautiful)</span>
+          <span class="booking-priority priority-flex">Optional / Anytime</span>
+        </div>
+        <div class="booking-item">
+          <span class="booking-name">Snorkel gear rental (Maui) — pick up on arrival</span>
+          <span class="booking-priority priority-flex">On Arrival</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<footer>
+  <p>Prepared for <strong>RDU → Hawaii Family Trip · July 2026</strong></p>
+  <p style="margin-top:6px;">3 travelers · 6 nights · Oahu, Big Island &amp; Maui · Mid-range · Balanced pace</p>
+  <p style="margin-top:8px; font-size: 11px; opacity:0.5;">Prices are estimates based on April 2026 data and are subject to change. Verify all bookings directly.</p>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script>
+  /* ── Initialize Hawaii Map ── */
+  const map = L.map('hawaii-map', {
+    center: [20.5, -157.0],
+    zoom: 7,
+    scrollWheelZoom: false,
+    zoomControl: true
+  });
+
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '© OpenStreetMap',
+    maxZoom: 18
+  }).addTo(map);
+
+  /* ── Pin data ── */
+  const stops = [
+    // OAHU
+    { lat: 21.3187, lng: -157.9224, type: 'airport', cat: 'oahu', day: 'Day 1', name: 'HNL — Daniel K. Inouye Airport', desc: 'Arrival hub. Pick up rental car here.' },
+    { lat: 21.2793, lng: -157.8294, type: 'hotel', cat: 'oahu', day: 'Stay', name: 'Waikiki (hotel base)', desc: 'Ilikai Hotel or Outrigger Waikiki — your home for 2 nights.' },
+    { lat: 21.2620, lng: -157.8056, type: 'sight', cat: 'oahu', day: 'Day 2 · 8 AM', name: 'Diamond Head Crater', desc: '1.6-mile hike, panoramic Honolulu views. Book at recreation.gov.' },
+    { lat: 21.3650, lng: -157.9504, type: 'sight', cat: 'oahu', day: 'Day 2 · 12:30 PM', name: 'Pearl Harbor Memorial', desc: 'USS Arizona Memorial. Free timed entry — reserve in advance.' },
+
+    // BIG ISLAND
+    { lat: 19.7203, lng: -155.0485, type: 'airport', cat: 'bigisland', day: 'Day 3', name: 'ITO — Hilo Airport', desc: 'Arrive on Big Island here. Pick up rental car.' },
+    { lat: 19.4194, lng: -155.2885, type: 'hotel', cat: 'bigisland', day: 'Day 3 Stay', name: 'Volcano House / Volcano Village', desc: 'Stay inside Hawaii Volcanoes National Park.' },
+    { lat: 19.4204, lng: -155.2870, type: 'sight', cat: 'bigisland', day: 'Day 3 · 1 PM', name: 'Kilauea Visitor Center', desc: 'Start of your volcano exploration.' },
+    { lat: 19.4135, lng: -155.2475, type: 'sight', cat: 'bigisland', day: 'Day 3 · 2:30 PM', name: 'Thurston Lava Tube', desc: 'Walk through an ancient lava cave. Kid favorite!' },
+    { lat: 19.7197, lng: -155.0866, type: 'sight', cat: 'bigisland', day: 'Day 4 · 8 AM', name: 'Rainbow Falls', desc: '80-foot waterfall in Hilo. 5-min walk from parking.' },
+    { lat: 19.8534, lng: -155.1543, type: 'sight', cat: 'bigisland', day: 'Day 4 · 9:30 AM', name: 'Akaka Falls State Park', desc: '0.4-mile loop to a 442-ft waterfall through bamboo forest.' },
+    { lat: 20.1180, lng: -155.5843, type: 'sight', cat: 'bigisland', day: 'Day 4 · 1:30 PM', name: 'Waipio Valley Lookout', desc: 'Sacred valley panorama, no hike needed.' },
+    { lat: 19.6147, lng: -155.9826, type: 'hotel', cat: 'bigisland', day: 'Day 4 Stay', name: 'Aston Kona by the Sea', desc: 'Mid-range oceanfront hotel in Kona.' },
+    { lat: 19.7388, lng: -156.0456, type: 'airport', cat: 'bigisland', day: 'Day 5', name: 'KOA — Kona Airport', desc: 'Depart Big Island here for Maui.' },
+
+    // MAUI
+    { lat: 20.8893, lng: -156.4337, type: 'airport', cat: 'maui', day: 'Day 5', name: 'OGG — Kahului Airport', desc: 'Arrive on Maui. Pick up final rental car.' },
+    { lat: 20.8783, lng: -156.6825, type: 'hotel', cat: 'maui', day: 'Stay', name: 'Lahaina / Kaanapali area', desc: 'Hotel base for 2 nights on west Maui.' },
+    { lat: 20.9988, lng: -156.6680, type: 'sight', cat: 'maui', day: 'Day 5 · 1 PM', name: 'Kapalua Bay / Napili Bay', desc: 'Calm, kid-friendly snorkeling beach. Sea turtles common!' },
+    { lat: 20.9244, lng: -156.6948, type: 'sight', cat: 'maui', day: 'Day 5 · 3:30 PM', name: 'Whaler\'s Village', desc: 'Open-air shopping, shave ice, ocean boardwalk.' },
+    { lat: 20.7097, lng: -156.2533, type: 'sight', cat: 'maui', day: 'Day 6 · 5 AM', name: 'Haleakala Summit', desc: '10,023 ft. Sunrise above the clouds. Permits required!' },
+    { lat: 20.8800, lng: -156.5444, type: 'sight', cat: 'maui', day: 'Day 6 · 11 AM', name: 'Iao Valley State Monument', desc: '0.6-mile paved trail to the Iao Needle. Lush and dramatic.' },
+    { lat: 20.8408, lng: -156.5127, type: 'sight', cat: 'maui', day: 'Day 6 · 1:30 PM', name: 'Maui Tropical Plantation', desc: 'Tram tour through working plantation. Kid-friendly.' },
+    { lat: 20.8728, lng: -156.6796, type: 'sight', cat: 'maui', day: 'Day 6 · 5 PM', name: 'Lahaina Harbor (Sunset Cruise)', desc: 'Optional 2-hr family snorkel cruise.' }
+  ];
+
+  /* ── Pin colors by category ── */
+  const colorMap = {
+    oahu: '#0a6e8a',
+    bigisland: '#2d6a4f',
+    maui: '#c44d2e'
+  };
+  const typeColorOverride = {
+    airport: '#f4a261',
+    hotel: '#6b46c1'
+  };
+
+  /* ── Create custom pin icon ── */
+  function makePinIcon(stop) {
+    const color = typeColorOverride[stop.type] || colorMap[stop.cat];
+    let label = '';
+    if (stop.type === 'airport') label = '✈';
+    else if (stop.type === 'hotel') label = '⌂';
+    return L.divIcon({
+      className: 'custom-pin',
+      html: `<div class="pin-icon" style="background:${color};"><span>${label}</span></div>`,
+      iconSize: [22, 22],
+      iconAnchor: [11, 22],
+      popupAnchor: [0, -22]
+    });
+  }
+
+  /* ── Create marker with popup ── */
+  function makeMarker(stop) {
+    const marker = L.marker([stop.lat, stop.lng], { icon: makePinIcon(stop) });
+    const popupHtml = `
+      <div class="popup-day ${stop.cat}">${stop.day}</div>
+      <div class="popup-title">${stop.name}</div>
+      <div class="popup-desc">${stop.desc}</div>
+    `;
+    marker.bindPopup(popupHtml);
+    marker._stopData = stop;
+    return marker;
+  }
+
+  /* ── Add all markers ── */
+  const markers = stops.map(makeMarker);
+  const markerLayer = L.layerGroup(markers).addTo(map);
+
+  /* ── Connecting routes per island ── */
+  const routes = {
+    oahu: stops.filter(s => s.cat === 'oahu').map(s => [s.lat, s.lng]),
+    bigisland: stops.filter(s => s.cat === 'bigisland').map(s => [s.lat, s.lng]),
+    maui: stops.filter(s => s.cat === 'maui').map(s => [s.lat, s.lng])
+  };
+
+  const routeLines = {
+    oahu: L.polyline(routes.oahu, { color: '#0a6e8a', weight: 2, opacity: 0.5, dashArray: '6,8' }),
+    bigisland: L.polyline(routes.bigisland, { color: '#2d6a4f', weight: 2, opacity: 0.5, dashArray: '6,8' }),
+    maui: L.polyline(routes.maui, { color: '#c44d2e', weight: 2, opacity: 0.5, dashArray: '6,8' })
+  };
+  Object.values(routeLines).forEach(line => line.addTo(map));
+
+  /* ── Fit map to all markers initially ── */
+  const allBounds = L.latLngBounds(stops.map(s => [s.lat, s.lng]));
+  map.fitBounds(allBounds, { padding: [30, 30] });
+
+  /* ── Filter buttons ── */
+  document.querySelectorAll('.map-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      document.querySelectorAll('.map-btn').forEach(b => b.classList.remove('active'));
+      this.classList.add('active');
+
+      const filter = this.dataset.filter;
+      markerLayer.clearLayers();
+      Object.values(routeLines).forEach(line => map.removeLayer(line));
+
+      let visibleStops = [];
+      if (filter === 'all') {
+        markers.forEach(m => markerLayer.addLayer(m));
+        Object.values(routeLines).forEach(line => line.addTo(map));
+        visibleStops = stops;
+      } else if (filter === 'airports') {
+        const filtered = markers.filter(m => m._stopData.type === 'airport');
+        filtered.forEach(m => markerLayer.addLayer(m));
+        visibleStops = stops.filter(s => s.type === 'airport');
+      } else {
+        const filtered = markers.filter(m => m._stopData.cat === filter);
+        filtered.forEach(m => markerLayer.addLayer(m));
+        if (routeLines[filter]) routeLines[filter].addTo(map);
+        visibleStops = stops.filter(s => s.cat === filter);
+      }
+
+      if (visibleStops.length > 0) {
+        const bounds = L.latLngBounds(visibleStops.map(s => [s.lat, s.lng]));
+        map.fitBounds(bounds, { padding: [40, 40], maxZoom: 11 });
+      }
+    });
+  });
+
+  /* ── Enable scroll zoom on click ── */
+  map.on('click', () => map.scrollWheelZoom.enable());
+  map.on('mouseout', () => map.scrollWheelZoom.disable());
+</script>
+
+<script>
+  document.querySelectorAll('.nav-tab').forEach(tab => {
+    tab.addEventListener('click', function(e) {
+      document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+      this.classList.add('active');
+    });
+  });
+  window.addEventListener('scroll', () => {
+    const sections = ['overview','map','highlights','oahu','bigisland','maui','costs','booking'];
+    const tabs = document.querySelectorAll('.nav-tab');
+    let current = '';
+    sections.forEach(id => {
+      const el = document.getElementById(id);
+      if (el && el.getBoundingClientRect().top < 120) current = id;
+    });
+    tabs.forEach(tab => {
+      tab.classList.remove('active');
+      if (tab.getAttribute('href') === '#' + current) tab.classList.add('active');
+    });
+  });
+</script>
+</body>
+</html>
